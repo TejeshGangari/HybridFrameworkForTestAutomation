@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -24,13 +25,13 @@ public class ExcelDriver {
 		
 		String execFlag;
 		HashMap<String,String> map = new HashMap<String, String>();
-		HashMap<String,String> tempMap = map;
+		
 		/*
 		 *  ClassLoader cl =
 		 * getClass().getClassLoader();
 		 * File file = new File(cl.getResource(workbookName).getFile());
 		 */
-		File file = new File("C:\\Users\\F85TG00\\eclipse-workspace\\HybridFramework\\src\\resources\\java\\Run Manager.xlsx");
+		File file = new File(System.getProperty("user.dir")+"\\Run Manager.xlsx");
 		
 		try {
 			fi = new FileInputStream(file);
@@ -51,20 +52,26 @@ public class ExcelDriver {
 			for(int j=0;j<colCount;j++) {
 				execFlag = sheet.getRow(i).getCell(3).getStringCellValue();
 				testID = sheet.getRow(i).getCell(1).getStringCellValue();
-				if(testID.isEmpty()) {
-					isTestIDEmpty = true;
-					break;
-				}else {
-					if(execFlag.equalsIgnoreCase("YES")) {
+				if(!testID.isEmpty()) {
+					if(execFlag.equalsIgnoreCase("YES")) {						
 						map.put(sheet.getRow(0).getCell(j).getStringCellValue(), row.getCell(j).getStringCellValue());
 					}else {
 						break;
 					}
+				}else {
+					isTestIDEmpty = true;
+					break;
 				}
 			}
-			if(isTestIDEmpty) {
-				dataTable.put(testID, map);
-				
+			if(!isTestIDEmpty) {
+				if(!map.isEmpty()) {
+					HashMap<String,String> temp = new HashMap<String,String>();
+					temp.putAll(map);
+					map.clear();
+					dataTable.put(testID, temp);
+				}else {
+					continue;
+				}
 			}else {
 				break;
 			}

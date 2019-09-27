@@ -4,8 +4,8 @@ import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
 
 import SupportingComponents.DataTableReader;
 
@@ -19,8 +19,8 @@ public class ReusableLibrary {
 
 	public WebDriver driver;
 	public Properties prop;
-	public ExtentReports report;
-	public ExtentTest extTest;
+	public ExtentReports extReport;
+	public ExtentTest extTestLogger;
 	public DataTableReader dataTable;
 	
 	public ReusableLibrary() {
