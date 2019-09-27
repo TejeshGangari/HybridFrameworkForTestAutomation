@@ -6,7 +6,6 @@
       <class name="SupportingComponents.ExtentReportRunner">
         <methods>
           <include name="passTest"/>
-          <include name="setUpReport"/>
           <include name="getResult"/>
         </methods>
       </class> <!-- SupportingComponents.ExtentReportRunner -->
