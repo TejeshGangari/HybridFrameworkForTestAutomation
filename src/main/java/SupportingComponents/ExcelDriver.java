@@ -4,47 +4,34 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelDriver {
 	
-	public FileInputStream fi;
-	public XSSFWorkbook wb;
-	public XSSFSheet sheet;
-	public Row row;
-	public HashMap<String,HashMap<String,String>> dataTable = new HashMap<String,HashMap<String,String>>();
-	public String testID;
-	public boolean isTestIDEmpty = false;
+	static public FileInputStream fi;
+	static public XSSFWorkbook wb;
+	static public XSSFSheet sheet;
+	static public Row row;
+	static public HashMap<String,HashMap<String,String>> dataTable = new HashMap<String,HashMap<String,String>>();
+	static public String testID;
+	static public boolean isTestIDEmpty = false;
 	
-	public HashMap<String,HashMap<String,String>> getExcelData(String workbookName,int sheetIndex){
+	public static HashMap<String,HashMap<String,String>> getRunDetails(){
 		
 		String execFlag;
 		HashMap<String,String> map = new HashMap<String, String>();
 		
-		/*
-		 *  ClassLoader cl =
-		 * getClass().getClassLoader();
-		 * File file = new File(cl.getResource(workbookName).getFile());
-		 */
-		File file = new File(System.getProperty("user.dir")+"\\Run Manager.xlsx");
+		wb = FileHandling.getWorkBook(System.getProperty("user.dir")+"\\Run Manager.xlsx");
 		
-		try {
-			fi = new FileInputStream(file);
-			wb = new XSSFWorkbook(fi);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		sheet = wb.getSheetAt(sheetIndex);
+		sheet = wb.getSheetAt(0); //Getting the Run Manager details from the first sheet
 		int rowCount = sheet.getLastRowNum();
 		for(int i=1;i<=rowCount;i++) {
 			row = sheet.getRow(i);
@@ -79,4 +66,62 @@ public class ExcelDriver {
 		
 		return dataTable;
 	}
+	
+	
+	public static ArrayList<Object> getDataTableContent(String filePath,String testID){
+		XSSFSheet bfSheet,tdSheet;
+		HashMap<String,String> testData = new HashMap<String, String>();
+		String bfTestID,tdTestID;
+		Row row;
+		Cell cell;
+		String cellValue;
+		List<String> keywords = new ArrayList<String>();
+		ArrayList<Object> dataTable = new ArrayList<Object>();
+		
+		wb = FileHandling.getWorkBook(filePath);
+		bfSheet = wb.getSheetAt(0); //Index 0 is for BusinessFlow sheet
+		tdSheet = wb.getSheetAt(1); //Index 1 is for Test data sheet
+		
+		//Block for reading BusinessFlow data
+		int bfRowCount = bfSheet.getLastRowNum();
+		for(int i=1;i<bfRowCount;i++) {
+			row = bfSheet.getRow(i);
+			bfTestID = row.getCell(0).getStringCellValue();
+			if(!bfTestID.isEmpty()) {
+				if(bfTestID.equals(testID)) {
+					int bfColCount = row.getLastCellNum();
+					for(int j=1;j<bfColCount;j++) {
+						cellValue = row.getCell(j).getStringCellValue();
+						keywords.add(cellValue);
+					}
+				}
+			}else {
+				break;
+			}
+		}
+		
+		//Block for reading Test data
+		int tdRowCount = tdSheet.getLastRowNum();
+		for(int i=1;i<tdRowCount;i++) {
+			row = tdSheet.getRow(i);
+			tdTestID = row.getCell(0).getStringCellValue();
+			if(!tdTestID.isEmpty()) {
+				if(tdTestID.equals(testID)) {
+					int tdColCount = row.getLastCellNum();
+					for(int j=1;j<tdColCount;j++) {
+						cellValue = row.getCell(j).getStringCellValue();
+						testData.put(tdSheet.getRow(0).getCell(i).getStringCellValue(), cellValue);
+					}
+				}
+			}else {
+				break;
+			}
+		}
+		
+		dataTable.add(keywords);
+		dataTable.add(testData);
+		
+		return dataTable;
+	}
+	 
 }

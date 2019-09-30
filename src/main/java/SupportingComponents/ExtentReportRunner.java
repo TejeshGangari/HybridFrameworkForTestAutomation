@@ -20,12 +20,13 @@ public class ExtentReportRunner extends ReusableLibrary{
 		
 	
 	  @BeforeMethod 
-	public void setUpReport(String moduleName) {
+	public static void setUpReport(String moduleName) {
 		extReport = new ExtentReports(System.getProperty("user.dir") + "\\test-output\\"+moduleName+"Report"+getCurrentTimeStamp()+".html", true);
 		extReport.addSystemInfo("Host Name", "InnoMind");
 		extReport.addSystemInfo("Test Type", "Automation Testing");
 		extReport.addSystemInfo("User", "Tejesh Gangari");
 		extReport.loadConfig(new File(System.getProperty("user.dir") + "\\extent-config.xml"));
+		extTestLogger = extReport.startTest("passTest");
 	}
 	 
 	
@@ -43,7 +44,7 @@ public class ExtentReportRunner extends ReusableLibrary{
 	
 	
 	@AfterMethod
-	 public void getResult(ITestResult result){
+	 public static void getResult(ITestResult result){
 		 if(result.getStatus() == ITestResult.FAILURE){
 			 extTestLogger.log(LogStatus.FAIL, "Test Case Failed is "+result.getName());
 			 extTestLogger.log(LogStatus.FAIL, "Test Case Failed is "+result.getThrowable());
@@ -57,7 +58,7 @@ public class ExtentReportRunner extends ReusableLibrary{
 	}
 	
 	@Test
-	public String getCurrentTimeStamp() {
+	public static String getCurrentTimeStamp() {
 		return new SimpleDateFormat("MM-dd-yyyy-HH:mm:ss").format(new Date());
 	}
 }
