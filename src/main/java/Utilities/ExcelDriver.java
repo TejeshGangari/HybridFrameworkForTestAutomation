@@ -1,4 +1,4 @@
-package SupportingComponents;
+package Utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -84,7 +84,7 @@ public class ExcelDriver {
 		
 		//Block for reading BusinessFlow data
 		int bfRowCount = bfSheet.getLastRowNum();
-		for(int i=1;i<bfRowCount;i++) {
+		for(int i=1;i<=bfRowCount;i++) {
 			row = bfSheet.getRow(i);
 			bfTestID = row.getCell(0).getStringCellValue();
 			if(!bfTestID.isEmpty()) {
@@ -102,7 +102,7 @@ public class ExcelDriver {
 		
 		//Block for reading Test data
 		int tdRowCount = tdSheet.getLastRowNum();
-		for(int i=1;i<tdRowCount;i++) {
+		for(int i=1;i<=tdRowCount;i++) {
 			row = tdSheet.getRow(i);
 			tdTestID = row.getCell(0).getStringCellValue();
 			if(!tdTestID.isEmpty()) {
@@ -110,7 +110,7 @@ public class ExcelDriver {
 					int tdColCount = row.getLastCellNum();
 					for(int j=1;j<tdColCount;j++) {
 						cellValue = row.getCell(j).getStringCellValue();
-						testData.put(tdSheet.getRow(0).getCell(i).getStringCellValue(), cellValue);
+						testData.put(tdSheet.getRow(0).getCell(j).getStringCellValue(), cellValue);
 					}
 				}
 			}else {

@@ -1,16 +1,10 @@
 package CoreComponents;
 
-import SupportingComponents.ExcelDriver;
-import SupportingComponents.ExtentReportRunner;
+import Utilities.ExcelDriver;
+
 
 public class DriverClass {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		
-		TestRunner.runTest(ExcelDriver.getRunDetails());
-		
-	}
+	
 
 }

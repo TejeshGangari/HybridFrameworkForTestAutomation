@@ -20,27 +20,15 @@ public class ExtentReportRunner extends ReusableLibrary{
 		
 	
 	  @BeforeMethod 
-	public static void setUpReport(String moduleName) {
-		extReport = new ExtentReports(System.getProperty("user.dir") + "\\test-output\\"+moduleName+"Report"+getCurrentTimeStamp()+".html", true);
+	public static void setUpReport(String scenarioName, String testName) {
+		extReport = new ExtentReports(System.getProperty("user.dir") + "\\test-output\\"+scenarioName+"\\"+testName+" "+getCurrentTimeStamp()+".html", true);
 		extReport.addSystemInfo("Host Name", "InnoMind");
 		extReport.addSystemInfo("Test Type", "Automation Testing");
 		extReport.addSystemInfo("User", "Tejesh Gangari");
 		extReport.loadConfig(new File(System.getProperty("user.dir") + "\\extent-config.xml"));
-		extTestLogger = extReport.startTest("passTest");
+		extTestLogger = extReport.startTest(testName);
 	}
 	 
-	
-	@Test
-	 public void passTest(){
-	 //extent.startTest("TestCaseName", "Description")
-	 //TestCaseName – Name of the test
-	 //Description – Description of the test
-	 //Starting test
-	 extTestLogger = extReport.startTest("passTest");
-	 Assert.assertTrue(false);
-	 //To generate the log when the test case is passed
-	 extTestLogger.log(LogStatus.PASS, "Test Case Passed is passTest");
-	 }
 	
 	
 	@AfterMethod
@@ -52,13 +40,16 @@ public class ExtentReportRunner extends ReusableLibrary{
 			 extTestLogger.log(LogStatus.SKIP, "Test Case Skipped is "+result.getName());
 		 }
 	
-	extReport.endTest(extTestLogger);
-	extReport.flush();
-	extReport.close();
+	
 	}
 	
+	public static void endReport() {
+		extReport.endTest(extTestLogger);
+		extReport.flush();
+		extReport.close();
+	}
 	@Test
 	public static String getCurrentTimeStamp() {
-		return new SimpleDateFormat("MM-dd-yyyy-HH:mm:ss").format(new Date());
+		return new SimpleDateFormat("MM-dd-yyyy-HH-mm-ss").format(new Date());
 	}
 }

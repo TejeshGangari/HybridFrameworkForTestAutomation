@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
@@ -29,8 +32,13 @@ public class ReusableLibrary {
 	public static ArrayList<String> keywords = new ArrayList<String>();
 	public static HashMap<String, String> testData = new HashMap<String, String>();
 	public static FileInputStream fi;
+	public static Connection con;
+	public static Statement st;
+	public static ResultSet rs;
 	
 	public ReusableLibrary() {
+		
+		prop = new Properties();
 		try {
 			fi = new FileInputStream(new File(userDir+"\\src\\resources\\java\\GlobalSettings.properties"));
 			prop.load(fi);
